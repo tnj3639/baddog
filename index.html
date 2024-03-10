@@ -365,73 +365,6 @@
 
         <br><br><br>
         <div>
-            <span align="center" style="display:inline-block; width:82%;background-color: rgb(248, 248, 248);">
-                <table align="center" width=90% border=0 frameborder=0>
-                    <tr>
-                        <td width=25%>
-                            <input type="range" min="0" max="10" id="leftb-in" style="width: 100%">
-                            <script>
-                                document.querySelector('#leftb-in').addEventListener('input', e => {
-                                    controlAudioleft(e.target.value);
-                                });
-                            </script>
-                        </td>
-
-                    </td>
-                    <td colspan="2"><span class="left_setting">세팅 창에서 입력하세요!</span>
-                    </td>
-                    </tr>
-
-                    <tr style="font-weight: bold; border: solid 1px #000000">
-                        <td colspan="3">
-                            <table width=100%>
-                                <tr>
-                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
-                                        onclick="start_leftb()">
-                                        <font color="#3c3c3c" size="5">왼비</font></br>
-                                        <font color="#777777" size="3"><span class="left_start_key_show">START</span>
-                                        </font>
-                                    </td>
-                                    <td width=50% style="  background-color: #FFFFFF; border: 1px solid #dbdbdb;">
-                                        <font color="#777777" size="8"> <span class="left_timer">0.0 </span></font>
-                                    </td>
-                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
-                                        onclick="stop_leftb()">
-                                        <font color="#3c3c3c" size="5"><span class="left_info">멈춰!</span></font>
-                                        </br>
-                                        <font color="#777777" size="3"><span class="left_stop_key_show">STOP</span>
-                                        </font>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td width=25%>
-                            <div onclick="set_leftb_time(-500)">
-                                <img src="minus.jpg" width="20" height="20" />
-                            </div>
-                        </td>
-                        <td width=40%>
-                            <div>
-                                0.5s
-                            </div>
-                        </td>
-                        <td width=30%>
-                            <div onclick="set_leftb_time(500)">
-                                <img src="plus.jpg" width="20" height="20" />
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </span>
-            </span>
-
-            <br>
-
             <span align="center" style="display:inline-block; width:82%;">
                 <table align="center" width=90% border=0 frameborder=0>
                     <tr>
@@ -510,7 +443,7 @@
             </span>
             <br><br>
 
-            <span class="hidden-content" align="center" style="display:none; width:82%;background-color: rgb(248, 248, 248);">
+            <span align="center" style="display:inline-block; width:82%;">
                 <table align="center" width=90% border=0 frameborder=0>
                     <tr>
                         <td width=25%>
