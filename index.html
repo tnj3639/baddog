@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<object id="jnobgabnnbdhjompaagbfbjiimplamll" width="0" height="0" style="display: none;"></object>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>칼로스 타이머 by초코콘</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap');
+
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+        }
+
+        button {
+            border: 1px solid #dbdbdb;
+            background-color: #FFFFFF
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #c0c0c0;
+            cursor: pointer;
+            border-radius: 0;
+            /* iOS */
+            transition: background 450ms ease-in;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 8px;
+            height: 12px;
+            background: #3c3c3c;
+            border: 1px solid #292929;
+            border-radius: 20%;
+            cursor: default;
+        }
+    </style>
+    <script>
+        document.cookie = "key=value; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/";
+        var value = document.cookie.replace(/(?:(?:^|.*;\s*)key\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+        const bomAudio = new Audio();
+        bomAudio.src = "Audio/mucho.m4a";
+        const leftAudio = new Audio();
+        leftAudio.src = "Audio/left_big.m4a";
+        const bressAudio = new Audio();
+        bressAudio.src = "Audio/Bress2.mp3";
+        const diedAudio = new Audio();
+        diedAudio.src = "Audio/die.m4a"
+
+        var mRunning = 0;
+        var bomFirst = 9500;
+        var bomRepeat = 10750;
+        var bomAlert = 3500;
+        var bomStartkey = '1';
+        var bomStopkey = 'q';
+        var bombRunning = 0;
+        var bombTime = 0;
+
+        function start_bomb() {
+            runmainThread();
+            const date = new Date();
+            bombTime = date.getTime() + bomFirst;
+            bombRunning = 1;
+            bomplaying = 0;
+        }
+        function stop_bomb() {
+            bombRunning = 0;
+        }
+        function set_bomb_time(a) {
+            bombTime = bombTime + a;
+        }
+
+
+        var leftFirst = 14000;
+        var leftRepeat = 15000;
+        var leftAlert = 3500;
+        var leftStartkey = '2';
+        var leftStopkey = 'w';
+        var leftbRunning = 0;
+        var leftbTime = 0;
+
+        function start_leftb() {
+            runmainThread();
+            const date = new Date();
+            leftbTime = date.getTime() + leftFirst;
+            leftbRunning = 1;
+            leftplaying = 0;
+        }
+        function stop_leftb() {
+            leftbRunning = 0;
+        }
+        function set_leftb_time(a) {
+            leftbTime = leftbTime + a;
+        }
+
+        var paze = 0;
+        var bressAlert = 5000;
+        var bressStartkey = '3';
+        var bressStopkey = 'e';
+        var bressbRunning = 0;
+        var bressbTime = 0;
+        function start_bressb() {
+            runmainThread();
+            const date = new Date();
+            bressbTime = date.getTime() + 60000 - (paze * 15000);
+
+            bressbRunning = 1;
+            bressplaying = 0;
+        }
+        function stop_bressb() {
+            bressbRunning = 0;
+        }
+        function set_bressb_time(a) {
+            bressbTime = bressbTime + a;
+        }
+
+        var diedFirst = 150000;
+        var diedRepeat = 150000;
+        var diedAlert = 12000;
+        var diedbRunning = 0;
+        var diedbTime = 0;
+
+        function start_diedb() {
+            runmainThread();
+            const date = new Date();
+            diedbTime = date.getTime() + diedFirst;
+            diedbRunning = 1;
+            diedplaying = 0;
+        }
+        function stop_diedb() {
+            diedbRunning = 0;
+        }
+        function set_diedb_time(a) {
+            diedbTime = diedbTime + a;
+            if(a == 60000){
+                if(paze < 2){
+                    setpaze(paze + 1);
+                }
+            }
+        }
+
+
+
+        
+
+        function runmainThread() {
+            if (mRunning == 0) {
+                mRunning = 1;
+                MainThread();
+            }
+        }
+        function MainThread() {
+            setTimeout(function () {
+                const date = new Date();
+                let timer = date.getTime();
+                // CHECK BOMB
+                if (bombRunning == 1) {
+                    let x = document.getElementsByClassName("bom_timer")[0];
+                    x.innerText = ((bombTime - timer) / 1000).toFixed(1);
+                    if (timer > bombTime) {
+                        bomplaying = 0;
+                        bombTime += bomRepeat;
+                    }
+                    if ((timer + bomAlert) > bombTime) {
+                        if (bomplaying == 0) {
+                            bomplaying = 1;
+                            bomAudio.play();
+                        }
+                    }
+                }
+                // CHECK LEFT
+                if (leftbRunning == 1) {
+                    let x = document.getElementsByClassName("left_timer")[0];
+                    x.innerText = ((leftbTime - timer) / 1000).toFixed(1);
+                    if (timer > leftbTime) {
+                        leftplaying = 0;
+                        leftbTime += leftRepeat;
+                    }
+                    if ((timer + leftAlert) > leftbTime) {
+                        if (leftplaying == 0) {
+                            leftplaying = 1;
+                            leftAudio.play();
+                        }
+                    }
+                }
+                // CHECK BRESS
+                if (bressbRunning == 1) {
+                    let x = document.getElementsByClassName("bress_timer")[0];
+                    x.innerText = ((bressbTime - timer) / 1000).toFixed(1);
+
+                    if ((timer + bressAlert) > bressbTime) {
+                        if (bressplaying == 0) {
+                            bressplaying = 1;
+                            bressAudio.play();
+                        }
+                    }
+                    if(bressbTime - timer < 0){
+                        bressbRunning = 0;
+                    }
+                }
+
+                if (diedbRunning == 1) {
+                    let x = document.getElementsByClassName("died_timer")[0];
+                    let timeleft = ((diedbTime - timer) / 1000).toFixed(0);
+
+                    x.innerText = Math.floor(timeleft / 60) +"분"+ (timeleft % 60)+"초";
+                    if (timer > diedbTime) {
+                        diedplaying = 0;
+                        diedbTime += diedRepeat;
+                    }
+                    if ((timer + diedAlert) > diedbTime) {
+                        if (diedplaying == 0) {
+                            diedplaying = 1;
+                            diedAudio.play();
+                        }
+                    }
+                }
+
+                MainThread();
+            }, 100);
+        }
+
+        function controlAudioBomb(a) {
+            bomAudio.volume = (a / 10);
+            bomAudio.play()
+        }
+        function controlAudioleft(a) {
+            leftAudio.volume = (a / 10);
+            leftAudio.play()
+        }
+        function controlAudiobress(a) {
+            bressAudio.volume = (a / 10);
+            bressAudio.play()
+        }
+        
+        function controlAudiodied(a) {
+            diedAudio.volume = (a / 10);
+            diedAudio.play()
+        }
+        function setpaze(a) {
+            paze = a;
+            dlektldlf.style.backgroundColor = "white";
+            dlektldl.style.backgroundColor = "white";
+            dlektltka.style.backgroundColor = "white";
+            if (a == 0) {
+                dlektldlf.style.backgroundColor = "#dbdbdb";
+            }
+            if (a == 1) {
+                dlektldl.style.backgroundColor = "#dbdbdb";
+            }
+            if (a == 2) {
+                dlektltka.style.backgroundColor = "#dbdbdb";
+            }
+        }
+
+
+
+
+        window.addEventListener("keydown", (e) => {
+            const key = document.getElementById(e.key);
+            console.log("입력" + e.key);
+            switch (e.key) {
+                case bomStartkey:
+                    start_bomb();
+                    break;
+
+            }
+            if (e.key == bomStartkey) {
+                start_bomb();
+            }
+            if (e.key == bomStopkey) {
+                stop_bomb();
+            }
+            if (e.key == leftStartkey) {
+                start_leftb();
+            }
+            if (e.key == leftStopkey) {
+                stop_leftb();
+            }
+            if (e.key == bressStartkey) {
+                start_bressb();
+            }
+            if (e.key == bressStopkey) {
+                stop_bressb();
+            }
+        });
+
+        function handlePopupDataBoom(fboom, rboom, aboom, sboom, eboom) {
+            tmp = parseFloat(fboom);
+            bomFirst = (1000 * tmp);
+            console.log("test" + bomFirst);
+            tmp = parseFloat(rboom);
+            bomRepeat = (1000 * tmp);
+            console.log("test" + bomRepeat);
+            tmp = parseFloat(aboom);
+            bomAlert = (1000 * tmp);
+            bomStartkey = sboom;
+            bomStopkey = eboom;
+
+            let x = document.getElementsByClassName("bom_setting")[0];
+            x.innerText = "첫패턴 " + (bomFirst / 1000).toFixed(1) + "초  / 반복" + (bomRepeat / 1000).toFixed(1) + "초 / 알림" + (bomAlert / 1000).toFixed(1) + "초 전 알림";
+            x = document.getElementsByClassName("bom_start_key_show")[0];
+            x.innerText = bomStartkey;
+            x = document.getElementsByClassName("bom_stop_key_show")[0];
+            x.innerText = bomStopkey;
+        }
+        function handlePopupDataleft(fleft, rleft, aleft, sleft, eleft) {
+            tmp = parseFloat(fleft);
+            leftFirst = (1000 * tmp);
+            console.log("test" + leftFirst);
+            tmp = parseFloat(rleft);
+            leftRepeat = (1000 * tmp);
+            console.log("test" + leftRepeat);
+            tmp = parseFloat(aleft);
+            leftAlert = (1000 * tmp);
+            leftStartkey = sleft;
+            leftStopkey = eleft;
+
+            let x = document.getElementsByClassName("left_setting")[0];
+            x.innerText = "첫패턴 " + (leftFirst / 1000).toFixed(1) + "초  / 반복" + (leftRepeat / 1000).toFixed(1) + "초 / 알림" + (leftAlert / 1000).toFixed(1) + "초 전 알림";
+            x = document.getElementsByClassName("left_start_key_show")[0];
+            x.innerText = leftStartkey;
+            x = document.getElementsByClassName("left_stop_key_show")[0];
+            x.innerText = leftStopkey;
+        }
+        function handlePopupDatabress(abress, sbress, ebress) {
+            tmp = parseFloat(abress);
+            bressAlert = (1000 * tmp);
+            bressStartkey = sbress;
+            bressStopkey = ebress;
+
+            let x = document.getElementsByClassName("bress_setting")[0];
+            x.innerText = "알림" + (bressAlert / 1000).toFixed(1) + "초 전 알림";
+            x = document.getElementsByClassName("bress_start_key_show")[0];
+            x.innerText = bressStartkey;
+            x = document.getElementsByClassName("bress_stop_key_show")[0];
+            x.innerText = bressStopkey;
+        }
+        function handlePopupDataAudio(bomurl, lefturl, bressurl){
+            bomAudio.src = bomurl;
+            leftAudio.src = lefturl;
+            bressAudio.src = bressurl;
+        }
+    </script>
+</head>
+
+<body>
+
+    <div align="center">
+
+        <img src="newimage.png" align="center" width="550px" /></br>
+    <a href="https://open.kakao.com/o/gecM0sef">오픈카톡 문의하기</a><br>
+    세팅창에 한번 세팅한 내역 껏다켜도 남음<br>
+    단 , 브라우저 변경이나 캐시 초기화시 날아갈 수 있음..<br>
+    기본 단축키가 <br>
+    1,2,3 ( 폭 왼비 브레스 시작)<br>
+    q w e ( 폭 왼비 브레스 종료)<br>로 변경되었습니다.
+
+   
+    <br><br><br>
+
+
+        <h1>칼로스 타이머</h1> V2.3 ( Dev )
+
+        <br><br>
+        <button onclick="openPopup()" style="width: 180px; height: 50px;"><font color="#3c3c3c" size="5">Setting</font></button>
+
+        <script>
+            function openPopup() {
+                window.open("popup2_2.html", "popup", "width=880,height=410");
+            }
+        </script>
+        <br><br><br>
+        <div>
+            <span align="center" style="display:inline-block; width:82%;">
+                <table align="center" width=90% border=0 frameborder=0>
+                    <tr>
+                        <td width=25%>
+                            <input type="range" min="0" max="10" id="bomb-in" style="width: 100%">
+                            <script>
+                                document.querySelector('#bomb-in').addEventListener('input', e => {
+                                    controlAudioBomb(e.target.value);
+                                });
+                            </script>
+                        </td>
+                        <td colspan="2"><span class="bom_setting">세팅 창에서 입력하세요!</span>
+                        </td>
+                    </tr>
+
+                    <tr style="font-weight: bold; border: solid 1px #000000">
+                        <td colspan="3">
+                            <table width=100%>
+                                <tr>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="start_bomb()">
+                                        <font color="#3c3c3c" size="5">폭탄</font></br>
+                                        <font color="#777777" size="3"><span class="bom_start_key_show">START</span>
+                                        </font>
+                                    </td>
+                                    <td width=50% style="  background-color: #FFFFFF; border: 1px solid #dbdbdb;">
+                                        <font color="#777777" size="8"> <span class="bom_timer">0.0 </span></font>
+                                    </td>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="stop_bomb()">
+                                        <font color="#3c3c3c" size="5"><span class="bom_info">멈춰!</span></font>
+                                        </br>
+                                        <font color="#777777" size="3"><span class="bom_stop_key_show">STOP</span>
+                                        </font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width=25%>
+                            <div onclick="set_bomb_time(-500)">
+                                <img src="image/minus.jpg" />
+                            </div>
+                        </td>
+                        <td width=40%>
+                            <div>
+                                0.5s
+                            </div>
+                        </td>
+                        <td width=30%>
+                            <div onclick="set_bomb_time(500)">
+                                <img src="image/plus.jpg" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </span>
+
+
+            <span align="center" style="display:inline-block; width:82%;background-color: rgb(248, 248, 248);">
+                <table align="center" width=90% border=0 frameborder=0>
+                    <tr>
+                        <td width=25%>
+                            <input type="range" min="0" max="10" id="leftb-in" style="width: 100%">
+                            <script>
+                                document.querySelector('#leftb-in').addEventListener('input', e => {
+                                    controlAudioleft(e.target.value);
+                                });
+                            </script>
+                        </td>
+
+                    </td>
+                    <td colspan="2"><span class="left_setting">세팅 창에서 입력하세요!</span>
+                    </td>
+                    </tr>
+
+                    <tr style="font-weight: bold; border: solid 1px #000000">
+                        <td colspan="3">
+                            <table width=100%>
+                                <tr>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="start_leftb()">
+                                        <font color="#3c3c3c" size="5">왼비</font></br>
+                                        <font color="#777777" size="3"><span class="left_start_key_show">START</span>
+                                        </font>
+                                    </td>
+                                    <td width=50% style="  background-color: #FFFFFF; border: 1px solid #dbdbdb;">
+                                        <font color="#777777" size="8"> <span class="left_timer">0.0 </span></font>
+                                    </td>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="stop_leftb()">
+                                        <font color="#3c3c3c" size="5"><span class="left_info">멈춰!</span></font>
+                                        </br>
+                                        <font color="#777777" size="3"><span class="left_stop_key_show">STOP</span>
+                                        </font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width=25%>
+                            <div onclick="set_leftb_time(-500)">
+                                <img src="image/minus.jpg" />
+                            </div>
+                        </td>
+                        <td width=40%>
+                            <div>
+                                0.5s
+                            </div>
+                        </td>
+                        <td width=30%>
+                            <div onclick="set_leftb_time(500)">
+                                <img src="image/plus.jpg" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </span>
+            </span>
+
+            <br>
+
+            <span align="center" style="display:inline-block; width:82%;">
+                <table align="center" width=90% border=0 frameborder=0>
+                    <tr>
+                        <td width=25%>
+                            <input type="range" min="0" max="10" id="bressb-in" style="width: 100%">
+                            <script>
+                                document.querySelector('#bressb-in').addEventListener('input', e => {
+                                    controlAudiobress(e.target.value);
+                                });
+                            </script>
+                        </td>
+
+                    </td>
+                    <td colspan="2"><span class="bress_setting">세팅 창에서 입력하세요!</span>
+                    </td>
+                    </tr>
+
+                    <tr style="font-weight: bold; border: solid 1px #000000">
+                        <td colspan="3">
+                            <table width=100%>
+                                <tr>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="start_bressb()">
+                                        <font color="#3c3c3c" size="5">브레스</font></br>
+                                        <font color="#777777" size="3"><span class="bress_start_key_show">START</span>
+                                        </font>
+                                    </td>
+                                    <td width=50% style="  background-color: #FFFFFF; border: 1px solid #dbdbdb;">
+                                        <font color="#777777" size="8"> <span class="bress_timer">0.0 </span></font>
+                                    </td>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="stop_bressb()">
+                                        <font color="#3c3c3c" size="5"><span class="bress_info">멈춰!</span></font>
+                                        </br>
+                                        <font color="#777777" size="3"><span class="bress_stop_key_show">STOP</span>
+                                        </font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width=25%>
+                            <div onclick="set_bressb_time(-500)">
+                                <img src="image/minus.jpg" />
+                            </div>
+                        </td>
+                        <td width=40%>
+                            <div>
+                                0.5s
+                            </div>
+                        </td>
+                        <td width=30%>
+                            <div onclick="set_bressb_time(500)">
+                                <img src="image/plus.jpg" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            <div align="center">
+                <button id=dlektldlf style="width:25%;height:30px;margin-top:0%;background-color: #dbdbdb;"
+                    onclick="setpaze(0)">
+                    2-1
+                </button>
+                <button id=dlektldl style="width:25%;height:30px;margin-top:0%;" onclick="setpaze(1)">
+                    2-2
+                </button>
+                <button id=dlektltka style="width:25%;height:30px;margin-top:0%;" onclick="setpaze(2)">
+                    2-3
+                </button>
+            </div>
+            </span>
+            <br><br>
+
+            <span class="hidden-content" align="center" style="display:none; width:82%;background-color: rgb(248, 248, 248);">
+                <table align="center" width=90% border=0 frameborder=0>
+                    <tr>
+                        <td width=25%>
+                            <input type="range" min="0" max="10" id="diedb-in" style="width: 100%">
+                            <script>
+                                document.querySelector('#diedb-in').addEventListener('input', e => {
+                                    controlAudiodied(e.target.value);
+                                });
+                            </script>
+                        </td>
+
+                    </td>
+                    <td colspan="2"><span class="died_setting">세팅 창에서 입력하세요!</span>
+                    </td>
+                    </tr>
+
+                    <tr style="font-weight: bold; border: solid 1px #000000">
+                        <td colspan="3">
+                            <table width=100%>
+                                <tr>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="start_diedb()">
+                                        <font color="#3c3c3c" size="5">즉사</font></br>
+                                        <font color="#777777" size="3"><span class="died_start_key_show">입장하면클릭</span>
+                                        </font>
+                                    </td>
+                                    <td width=50% style="  background-color: #FFFFFF; border: 1px solid #dbdbdb;">
+                                        <font color="#777777" size="8"> <span class="died_timer">0.0 </span></font>
+                                    </td>
+                                    <td width=25% style="  background-color: #f7f7f7; border: 1px solid #dbdbdb;"
+                                        onclick="stop_diedb()">
+                                        <font color="#3c3c3c" size="5"><span class="died_info">멈춰!</span></font>
+                                        </br>
+                                        <font color="#777777" size="3"><span class="died_stop_key_show">STOP</span>
+                                        </font>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width=25%>
+                            <div onclick="set_diedb_time(-1000)">
+                                <img src="image/minus.jpg" />
+                            </div>
+                        </td>
+                        <td width=40%>
+                            <div>1초
+                            </div>
+                        </td>
+                        <td width=30%>
+                            <div onclick="set_diedb_time(1000)">
+                                <img src="image/plus.jpg" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            <div align="center">
+                <button style="width:25%;height:45px;margin-top:0%;" onclick="set_diedb_time(10000)">
+                    바인드 + 10초
+                </button>
+                <button style="width:25%;height:45px;margin-top:0%;" onclick="set_diedb_time(3000)">
+                    썬바/크바 + 3초
+                </button>
+                <button style="width:25%;height:45px;margin-top:0%;" onclick="set_diedb_time(60000)">
+                    패턴 파훼 + 60초(그로기+바인드 포함)
+                </button>
+            </div>
+            <br>
+            </span>
+            <br>
+            <button style="width:150px;height:30px;margin-top:0%;" onclick="toggleContent()">전탄</button>
+
+            <script>
+            function toggleContent() {
+              var content = document.querySelector('.hidden-content');
+              if (content.style.display === 'none') {
+                content.style.display = 'inline-block';
+              } else {
+                content.style.display = 'none';
+                stop_diedb()
+              }
+            }
+            </script>
+            </br>
+            </br>
+            </br>
+            </br>
+            사용법 : <a href ="https://www.inven.co.kr/board/maple/2304/33457">https://www.inven.co.kr/board/maple/2304/33457</a>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            제작 : 초코콘 / BOSS / 엘리시움
+            </br>
+            문의 : 오픈카톡 / 인벤댓글
+            </br>
+
+
+            <br>
+            디자인 도움 : 와써 </br>
+            패턴 검수 : 욘램, 함페르, 버프가부족햄</br>
+            리소스 제공 : 문맹률, 머쵸, 허빈이
+            </br>
+
+            </br>
+</body>
+
+</html>
